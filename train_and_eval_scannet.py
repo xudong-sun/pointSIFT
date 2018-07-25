@@ -249,7 +249,7 @@ class SegTrainer(object):
                     ave_loss /= iter_in_epoch
                     print("epoch %d , loss is %f take %.3f s" % (epoch + 1, ave_loss, time.time() - tic))
                     tic = time.time()
-                    if (epoch + 1) % 5 == 0:
+                    if (epoch + 1) % 10 == 0:
                         acc = self.evaluate_one_epoch(sess, evaluate_writer, step, epoch)
                         if acc > best_acc:
                             _path = saver.save(sess, os.path.join(SAVE_PATH, "best_seg_model_%d.ckpt" % (epoch + 1)))
