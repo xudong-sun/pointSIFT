@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--max_epoch', type=int, default=1000, help='epoch to run[default: 1000]')
 parser.add_argument('--batch_size', type=int, default=32, help='batch size during training[default: 32')
 parser.add_argument('--learning_rate', type=float, default=1e-3, help='initial learning rate[default: 1e-3]')
+parser.add_argument('--load_ckpt', '-l', default=None, help='Path to a check point file for load')
 parser.add_argument('--save_path', default='model_param', help='model param path')
 parser.add_argument('--data_path', default='data', help='scannet dataset path')
 parser.add_argument('--train_log_path', default='log/pointSIFT_train')
@@ -27,6 +28,7 @@ FLAGS = parser.parse_args()
 BATCH_SZ = FLAGS.batch_size
 LEARNING_RATE = FLAGS.learning_rate
 MAX_EPOCH = FLAGS.max_epoch
+LOAD_CKPT = FLAGS.load_ckpt
 SAVE_PATH = FLAGS.save_path
 DATA_PATH = FLAGS.data_path
 TRAIN_LOG_PATH = FLAGS.train_log_path
@@ -228,6 +230,8 @@ class SegTrainer(object):
                 evaluate_writer = tf.summary.FileWriter(TEST_LOG_PATH, sess.graph)
                 sess.run(tf.global_variables_initializer())
                 epoch_sz = MAX_EPOCH
+                if LOAD_CKPT is not None:
+                    saver.restore(sess, LOAD_CKPT)
                 tic = time.time()
                 for epoch in range(epoch_sz):
                     ave_loss = 0
